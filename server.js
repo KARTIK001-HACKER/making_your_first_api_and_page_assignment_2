@@ -50,6 +50,44 @@ List of Status Codes to Handle:
 200, 201, 204, 400, 401, 403, 404, 405, 429, 500, 502, 503, 504
 */
 
+// Status codes and their respective messages
+const statusMessages = {
+  200: "OK: The request has succeeded. The meaning of this status depends on the HTTP method used.",
+  201: "Created: The request has been fulfilled and resulted in a new resource being created.",
+  204: "No Content: The server successfully processed the request but is not returning any content.",
+  400: "Bad Request: The server cannot process the request due to client-side errors (e.g., malformed syntax).",
+  401: "Unauthorized: The request requires user authentication.",
+  403: "Forbidden: The server understands the request but refuses to authorize it.",
+  404: "Not Found: The server has not found anything matching the request URI. This is often caused by a missing page or resource.",
+  405: "Method Not Allowed: The HTTP method is not supported for the requested resource.",
+  429: "Too Many Requests: The user has sent too many requests in a given amount of time.",
+  500: "Internal Server Error: The server encountered an unexpected condition that prevented it from fulfilling the request.",
+  502: "Bad Gateway: The server received an invalid response from an upstream server.",
+  503: "Service Unavailable: The server is temporarily unable to handle the request, often due to maintenance or overloading.",
+  504: "Gateway Timeout: The server did not receive a timely response from an upstream server."
+};
+
+// Define the GET endpoint
+app.get('/status-info', (req, res) => {
+  const { code } = req.query;
+
+  // Ensure the status code is a valid integer
+  const statusCode = parseInt(code);
+
+  // Check if the status code is in the predefined list
+  if (statusMessages[statusCode]) {
+      res.json({
+          status: statusCode,
+          message: statusMessages[statusCode]
+      });
+  } else {
+      res.status(400).json({
+          status: 400,
+          message: "Bad Request: The provided status code is not recognized or is missing."
+      });
+  }
+});
+
 const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Status Code API is running on http://localhost:${PORT}`);
